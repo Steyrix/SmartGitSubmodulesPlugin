@@ -1,0 +1,20 @@
+removingBranch=${1}
+test -z $removingBranch && echo "ERROR: Please provide the branch name." && exit 1
+
+test ! -z "$(git ls-remote --heads origin ${removingBranch})" && echo "Delete remote branch at first" && exit 1
+
+submodules=($(git config --file .gitmodules --get-regexp path | awk '{ print $2 }'))
+
+currentDirectory=$(pwd)
+
+for submodule in "${submodules[@]}"
+do
+    echo "Entering '$submodule'"
+    cd "$currentDirectory/$submodule"
+
+    git branch -D $removingBranch
+
+done
+
+cd "$currentDirectory"
+git branch -D $removingBranch

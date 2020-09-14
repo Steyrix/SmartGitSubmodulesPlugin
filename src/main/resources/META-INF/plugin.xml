@@ -1,0 +1,50 @@
+<idea-plugin>
+    <id>org.steyrix.SmartSubmoduleGitPlugin</id>
+    <name>Smart Submodule Git commands</name>
+    <vendor email="pevnev.georgy@gmail.com">Georgy Pevnev</vendor>
+
+    <description><![CDATA[
+    This plugin provides set of command and UI wrapping for extended custom <br>
+    Git commands, mostly used for convenient working with submodules.
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.vcs</depends>
+    <depends>Git4Idea</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+    </extensions>
+
+    <actions>
+        <group id="SmartSubmoduleGit.CustomCommandsList"
+               text="Smart Git Submodules Commands"
+               description="List of smart commands">
+            <add-to-group group-id="GitRepositoryActions" anchor="last"/>
+            <action id="SmartSubmoduleGit.Checkout"
+                    class="actions.SubmoduleCheckout"
+                    text="Submodules: Checkout"/>
+            <action id="SmartSubmoduleGit.SMerge"
+                    class="actions.SMerge"
+                    text="Submodules: Merge"
+                    description="Git command to merge current branches with specified ones"/>
+            <action id="SmartSubmoduleGit.TClean"
+                    class="actions.TClean"
+                    text="Submodules: Clean All"
+                    description="Git command to clean repository"/>
+            <action id="SmartSubmoduleGit.SClean"
+                    class="actions.SClean"
+                    text="Submodules: Clean Specified Branches"
+                    description="Git command to clean repository (remove branches with specified name)"/>
+        </group>
+
+        <action id="SmartSubmoduleGit.SCheckout"
+                class="actions.SCheckout"
+                text="Submodules: Checkout"
+                description="Git command to switch main module and submodules to certain branches"/>
+        <action id="SmartSubmoduleGit.SbCheckout"
+                class="actions.SbCheckout"
+                text="Submodules: Create Branch + Checkout"
+                description="Git command to switch main module and submodules to certain branches
+                    (and create them, if they are not present)"/>
+    </actions>
+</idea-plugin>

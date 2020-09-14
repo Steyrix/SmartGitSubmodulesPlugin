@@ -1,0 +1,9 @@
+branch=$1
+
+if [[ $(git rev-parse --verify --quiet ${branch}) ]]
+then
+    git checkout ${branch}
+    git pull
+else
+    git checkout -b ${branch}
+fi

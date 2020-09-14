@@ -1,0 +1,46 @@
+inputBranch=${1}
+inputSubmoduleBranch=${2}
+test -z $inputBranch && echo "ERROR: Please provide the branch name." && exit 1
+
+if currentBranch=$(git symbolic-ref --short -q HEAD); then
+    echo On branch $currentBranch
+
+    submodules=($(git config --file .gitmodules --get-regexp path | awk '{ print $2 }'))
+
+    currentDirectory=$(pwd)
+
+    for submodule in "${submodules[@]}"
+    do
+        cd "$currentDirectory/$submodule"
+
+        changes=$(git status -s -uno | wc -l)
+
+        if [ $changes -gt 0 ]; then
+            echo "warning: you have uncommited changes on $submodule";
+            cd "$currentDirectory"
+            exit 1
+            break
+        fi;
+    done
+
+    for submodule in "${submodules[@]}"
+    do
+        echo "entering '$submodule'"
+        cd "$currentDirectory/$submodule"
+
+        if [ -z $inputSubmoduleBranch ]
+        then
+            git merge $inputBranch
+        else
+            git merge $inputSubmoduleBranch
+        fi
+    done
+
+    cd "$currentDirectory"
+
+    git merge $inputBranch
+
+    echo Success!
+else
+    echo ERROR: Cannot find the current branch!
+fi
